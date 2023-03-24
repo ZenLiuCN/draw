@@ -1,4 +1,4 @@
-Subject: [PATCH] devel_ready
+Subject: [PATCH] devel_with_localDev
 ---
 Index: web/index.html
 IDEA additional info:
@@ -6,8 +6,8 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 <+>UTF-8
 ===================================================================
 diff --git a/web/index.html b/web/index.html
---- a/web/index.html	(revision c9b9cab57dc62845a84b447d0d48aba9b13905b9)
-+++ b/web/index.html	(date 1679676102114)
+--- a/web/index.html	(revision d403014c17bf7e5943912fe9e64dd1eaeb48f104)
++++ b/web/index.html	(date 1679676693121)
 @@ -11,7 +11,7 @@
  	<meta itemprop="description" content="draw.io is a free online diagramming application and flowchart maker . You can use it to create UML, entity relationship,
  		org charts, BPMN and BPM, database schema and networks. Also possible are telecommunication network, workflow, flowcharts, maps overlays and GIS, electronic 
@@ -21,7 +21,7 @@ diff --git a/web/index.html b/web/index.html
  			
  			// Used to request draw.io sources in dev mode
  			var drawDevUrl = document.location.protocol + '//devhost.jgraph.com/drawio/src/main/webapp/';
-+			if(urlParams['local']=='1'){
++			if(urlParams['localDev']=='1'){
 +				mxDevUrl=document.location.protocol+'//'+document.location.host+'/';
 +				drawDevUrl=document.location.protocol+'//'+document.location.host+'/';
 +			}
@@ -50,8 +50,8 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 <+>UTF-8
 ===================================================================
 diff --git a/web/js/diagramly/Devel.js b/web/js/diagramly/Devel.js
---- a/web/js/diagramly/Devel.js	(revision c9b9cab57dc62845a84b447d0d48aba9b13905b9)
-+++ b/web/js/diagramly/Devel.js	(date 1679676142746)
+--- a/web/js/diagramly/Devel.js	(revision d403014c17bf7e5943912fe9e64dd1eaeb48f104)
++++ b/web/js/diagramly/Devel.js	(date 1679676562775)
 @@ -6,12 +6,13 @@
   * is used for development mode where the JS is in separate
   * files and the mxClient.js loads other files.
