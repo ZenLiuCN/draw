@@ -1,20 +1,21 @@
 <?xml version="1.0"?>
 <project basedir="." default="build">
     <!-- Modification:
-    basedirs replace with web.dir,
+    basedirs replace with build.dir,
     source at web.dir
     temporary file at web.tmp
     output files at web.out
      -->
-    <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="${plugin_classpath}"/>
+    <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
+             classpath="${plugin_classpath}"/>
     <target name="merge">
+        <echo message="shapes compile" level="info"/>
         <concat destfile="${web.tmp}/shapes.js" fixlastline="yes" append="no">
             <fileset dir="${web.dir}/shapes" includes="**/*.js"/>
             <fileset dir="${web.dir}/stencils" includes="**/*.js"/>
         </concat>
-        <java fork="false" classname="tools.Xml2Js" classpath="${xml2js}">
-            <arg value="${web.dir}/stencils"/>
-            <arg value="${web.out}/js/stencils.min.js"/>
+        <java fork="false" classname="tools.Xml2Js" classpath="${build.dir}" failonerror="true">
+            <arg line="${web.dir}/stencils ${web.out}/js/stencils.min.js"/>
         </java>
         <jscomp compilationLevel="simple" debug="false" forceRecompile="true"
                 output="${web.out}/js/shapes-14-6-5.min.js">
@@ -28,6 +29,7 @@
         <delete dir="${web.tmp}"/>
     </target>
     <target name="app" depends="merge">
+        <echo message="app compile" level="info"/>
         <delete file="${web.tmp}/.tmp0.js"/>
         <echo file="${web.tmp}/.tmp0.js">
             window.PROXY_URL = window.PROXY_URL || 'https://viewer.diagrams.net/proxy';
@@ -270,7 +272,7 @@
 
         <concat destfile="${web.out}/js/viewer-static.min.js" fixlastline="yes" append="no">
             <filelist dir="${web.tmp}" files="base-viewer.min.js"/>
-            <filelist dir="${web.dir}/js" files="shapes-14-6-5.min.js"/>
+            <filelist dir="${web.out}/js" files="shapes-14-6-5.min.js"/>
             <filelist dir="${web.tmp}" files=".tmp3.js,.tmp2.min.js"/>
         </concat>
 
@@ -331,7 +333,8 @@
 
         <replace file="${web.tmp}/base.min.js" token="@DRAWIO-VERSION@" value="${version}"/>
 
-        <jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${web.dir}/js/extensions.min.js">
+        <jscomp compilationLevel="simple" debug="false" forceRecompile="true"
+                output="${web.out}/js/extensions.min.js">
             <sources dir="${web.dir}/js/diagramly">
                 <file name="Extensions.js"/>
             </sources>
@@ -364,7 +367,7 @@
         <concat destfile="${web.out}/js/extensions.min.js" fixlastline="yes" append="yes">
             <fileset file="${web.dir}/js/jszip/jszip.min.js"/>
             <fileset file="${web.dir}/js/mermaid/mermaid.min.js"/>
-            <fileset file="${web.dir}/js/orgchart.min.js"/>
+            <fileset file="${web.out}/js/orgchart.min.js"/>
         </concat>
 
         <delete file="${web.tmp}/.tmp1.js"/>
@@ -460,9 +463,10 @@
         <delete file="${web.tmp}/.tmp1.js"/>
     </target>
     <target name="atlas" depends="app">
+        <echo message="atlas compile" level="info"/>
         <concat destfile="${web.out}/js/atlas-viewer.min.js" fixlastline="yes" append="no">
             <file name="${web.tmp}/base-viewer.min.js"/>
-            <file name="${web.dir}/js/orgchart.min.js"/>
+            <file name="${web.out}/js/orgchart.min.js"/>
         </concat>
 
         <jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${web.tmp}/.tmp0.js">
@@ -480,10 +484,11 @@
         <delete file="${web.tmp}/.tmp0.js"/>
     </target>
     <target name="integrate" depends="atlas">
+        <echo message="integrate compile" level="info"/>
         <copy file="${web.out}/js/atlas.min.js" tofile="${web.out}/js/integrate.min.js" overwrite="true"/>
 
         <jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${web.tmp}/.tmp0.js">
-            <sources dir="${web.build}/">
+            <sources dir="${build.dir}/">
                 <file name="Integrate.js"/>
             </sources>
         </jscomp>
@@ -497,26 +502,40 @@
         <delete file="${web.tmp}/.tmp0.js"/>
     </target>
     <target name="all" depends="app, integrate">
+        <echo message="Clean up" level="info"/>
         <delete file="${web.out}/js/atlas-viewer.min.js"/>
         <delete file="${web.out}/js/atlas.min.js"/>
     </target>
     <target name="build" depends="all">
+        <echo message="Copying HTML" level="info"/>
         <copy todir="${web.out}" overwrite="true">
-            <fileset file="${web.dir}/index.html"/>
-            <fileset file="${web.dir}/open.html"/>
-            <fileset file="${web.dir}/vsdxImporter.html"/>
-            <fileset file="${web.dir}/export3.html"/>
+            <fileset dir="${web.dir}" includes="*.html"/>
+        </copy>
+        <!--<java fork="true" classname="tools.HtmlCompress" failonerror="true">
+            <classpath>
+                <pathelement path="${plugin_classpath}"/>
+                <pathelement location="${build.dir}"/>
+            </classpath>
+            <arg line="${web.dir}/index.html ${web.out}/index.html"/>
+        </java>-->
+        <!-- files maybe changed -->
+        <echo message="Copying Configuration" level="info"/>
+        <copy todir="${web.out}" overwrite="true">
             <fileset dir="${web.dir}" includes="**/PreConfig.js"/>
             <fileset dir="${web.dir}" includes="**/PostConfig.js"/>
+        </copy>
+        <!--  files may not be changed-->
+        <echo message="Copying Resources" level="info"/>
+        <copy todir="${web.out}">
             <fileset dir="${web.dir}" includes="favicon.*"/>
             <fileset dir="${web.dir}" includes="img/"/>
             <fileset dir="${web.dir}" includes="images/"/>
             <fileset dir="${web.dir}" includes="resources/"/>
             <fileset dir="${web.dir}" includes="styles/"/>
-            <fileset dir="${web.dir}" includes="mxgraph/"/>
+            <fileset dir="${web.dir}" includes="mxgraph/css/"/>
+            <fileset dir="${web.dir}" includes="mxgraph/images/"/>
+            <fileset dir="${web.dir}" includes="mxgraph/mxClient.js"/>
             <fileset dir="${web.dir}" includes="math/**/*.js"/>
         </copy>
-
-
     </target>
 </project>

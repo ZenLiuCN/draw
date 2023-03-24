@@ -152,7 +152,11 @@ public class Xml2Js {
                 result.append("  }\n");
                 result.append("};\n");
                 result.append("})();\n");
-
+                var out = new File(args[1]);
+                if (!out.exists()) {
+                    out.getParentFile().mkdirs();
+                    out.createNewFile();
+                }
                 FileWriter writer = new FileWriter(args[1]);
                 writer.write(result.toString());
                 writer.flush();

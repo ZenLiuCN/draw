@@ -23,13 +23,8 @@
         <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
-
-        <web.build>${project.basedir}/util</web.build>
-        <web.dir>${project.basedir}/web</web.dir>
-        <web.temp>${project.build.outputDirectory}/temp</web.temp>
-        <web.out>${project.build.outputDirectory}/META-INF/resources</web.out>
-        <!--        current draw.io version-->
-        <drawio.version>21.0.7.mod</drawio.version>
+        <!--   current draw.io version with mod suffix-->
+        <draw.version>21.0.7.mod</draw.version>
         <versions.spring-boot>2.7.10</versions.spring-boot>
     </properties>
     <groupId>io.github.zenliucn</groupId>
@@ -43,6 +38,16 @@
                 <version>${versions.spring-boot}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.hazendaz</groupId>
+                <artifactId>htmlcompressor</artifactId>
+                <version>1.8.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.javascript</groupId>
+                <artifactId>closure-compiler</artifactId>
+                <version>v20230228</version>
             </dependency>
             <!--//region CVE -->
             <dependency>
@@ -59,31 +64,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.cache</groupId>
-            <artifactId>cache-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>jcache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.nasdanika.core</groupId>
-            <artifactId>drawio</artifactId>
-            <version>2023.3.0</version>
-        </dependency>
+        <!--        <dependency>
+                    <groupId>org.nasdanika.core</groupId>
+                    <artifactId>drawio</artifactId>
+                    <version>2023.3.0</version>
+                </dependency>-->
 
     </dependencies>
     <build>
@@ -107,19 +92,20 @@
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                          <target>
-                              <property name="compile_classpath" refid="maven.compile.classpath"/>
-                              <property name="runtime_classpath" refid="maven.runtime.classpath"/>
-                              <property name="test_classpath" refid="maven.test.classpath"/>
-                              <property name="plugin_classpath" refid="maven.plugin.classpath"/>
-                              <property name="build.dir" value="${web.build}"/>
-                              <property name="web.dir" value="${web.dir}"/>
-                              <property name="web.tmp" value="${web.temp}"/>
-                              <property name="web.out" value="${web.out}"/>
-                              <property name="version" value="${drawio.version}"/>
-                              <property name="xml2js" value="${project.build.testOutputDirectory}"/>
-                              <ant antfile="${project.basedir}/util/build.xml"/>
-                          </target>
+                            <failOnError>true</failOnError>
+                            <target>
+                                <property name="compile_classpath" refid="maven.compile.classpath"/>
+                                <property name="runtime_classpath" refid="maven.runtime.classpath"/>
+                                <property name="test_classpath" refid="maven.test.classpath"/>
+                                <property name="plugin_classpath" refid="maven.plugin.classpath"/>
+                                <property name="build.dir" value="${project.basedir}/util"/>
+                                <property name="web.dir" value="${project.basedir}/web"/>
+                                <property name="web.tmp" value="${project.build.outputDirectory}/temp"/>
+                                <property name="web.out" value="${project.build.outputDirectory}/META-INF/resources"/>
+                                <property name="version" value="${draw.version}"/>
+                                <property name="xml2js" value="${project.build.testOutputDirectory}"/>
+                                <ant antfile="${project.basedir}/util/build.xml"/>
+                            </target>
                         </configuration>
                     </execution>
                 </executions>
