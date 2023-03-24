@@ -1,0 +1,97 @@
+Index: web/js/diagramly/Devel.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/web/js/diagramly/Devel.js b/web/js/diagramly/Devel.js
+--- a/web/js/diagramly/Devel.js	(revision 7278bd9251a0f8f391ebb3f655529104e184c7ec)
++++ b/web/js/diagramly/Devel.js	(date 1679675295383)
+@@ -6,12 +6,13 @@
+  * is used for development mode where the JS is in separate
+  * files and the mxClient.js loads other files.
+  */
++/*
+ if (!mxIsElectron && location.protocol !== 'http:')
+ {
+ 	(function()
+ 	{
+ 		var hashes = 'default-src \'self\'; ' +
+-			'script-src %script-src% \'self\' https://viewer.diagrams.net https://apis.google.com https://*.pusher.com ' +
++			'script-src %script-src% \'self\' https://viewer.diagrams.net https://apis.google.com https://!*.pusher.com ' +
+ 			// Below are the SHAs of the two script blocks in index.html.
+ 			// These must be updated here and in the CDN after changes.
+ 			//----------------------------------------------------------//
+@@ -46,17 +47,17 @@
+ 			'\'sha256-xjAW8oXqJlP0CWqxT9s80kgOtOjvENMmfnnfulL6p1A=\' ' + // gapi
+ 			'\'unsafe-hashes\'; '; // Required for hashes for style attribute
+
+-		var directives = 'connect-src %connect-src% \'self\' https://*.draw.io https://*.diagrams.net ' +
+-			'https://*.googleapis.com wss://app.diagrams.net wss://*.pusher.com https://*.pusher.com ' +
++		var directives = 'connect-src %connect-src% \'self\' https://!*.draw.io https://!*.diagrams.net ' +
++			'https://!*.googleapis.com wss://app.diagrams.net wss://!*.pusher.com https://!*.pusher.com ' +
+ 			'https://api.github.com https://raw.githubusercontent.com https://gitlab.com ' +
+-			'https://graph.microsoft.com https://*.sharepoint.com  https://*.1drv.com https://api.onedrive.com ' +
++			'https://graph.microsoft.com https://!*.sharepoint.com  https://!*.1drv.com https://api.onedrive.com ' +
+ 			'https://dl.dropboxusercontent.com https://api.openai.com ' +
+-			'https://*.google.com https://fonts.gstatic.com https://fonts.googleapis.com; ' +
++			'https://!*.google.com https://fonts.gstatic.com https://fonts.googleapis.com; ' +
+ 			// font-src about: is required for MathJax HTML-CSS output with STIX
+ 			'img-src * data: blob:; media-src * data:; font-src * about:; ' +
+ 			// www.draw.io required for browser data migration to app.diagrams.net and
+ 			// viewer.diagrams.net required for iframe embed preview
+-			'frame-src %frame-src% \'self\' https://viewer.diagrams.net https://www.draw.io https://*.google.com; ' +
++			'frame-src %frame-src% \'self\' https://viewer.diagrams.net https://www.draw.io https://!*.google.com; ' +
+ 			'style-src %style-src% \'self\'  https://fonts.googleapis.com ' +
+ 			// Replaces unsafe-inline style-src with hashes with safe-style-src URL parameter
+ 			((urlParams['safe-style-src'] == '1') ? styleHashes : '\'unsafe-inline\'; ') +
+@@ -69,7 +70,7 @@
+ 			// Adds script tags and loads shapes with eval
+ 			replace(/%script-src%/g, 'https://www.dropbox.com https://api.trello.com https://devhost.jgraph.com \'unsafe-eval\'').
+ 			// Adds Trello and Dropbox backend storage
+-			replace(/%connect-src%/g, 'https://*.dropboxapi.com https://trello.com https://api.trello.com').
++			replace(/%connect-src%/g, 'https://!*.dropboxapi.com https://trello.com https://api.trello.com').
+ 			// Loads common.css from mxgraph
+ 			replace(/%style-src%/g, 'https://devhost.jgraph.com').
+ 			replace(/%frame-src%/g, '').
+@@ -81,7 +82,7 @@
+ 		{
+ 			console.log('Content-Security-Policy');
+ 			var app_diagrams_net = csp.replace(/%script-src%/g, 'https://www.dropbox.com https://api.trello.com').
+-				replace(/%connect-src%/g, 'https://*.dropboxapi.com https://api.trello.com').
++				replace(/%connect-src%/g, 'https://!*.dropboxapi.com https://api.trello.com').
+ 				replace(/%frame-src%/g, '').
+ 					replace(/%style-src%/g, '').
+ 					replace(/  /g, ' ') + ' frame-ancestors \'self\' https://teams.microsoft.com;';
+@@ -100,7 +101,7 @@
+
+ 			var ac_draw_io = csp.replace(/%script-src%/g, 'https://aui-cdn.atlassian.com https://connect-cdn.atl-paas.net').
+ 					replace(/%frame-src%/g, 'https://www.lucidchart.com https://app.lucidchart.com https://lucid.app blob:').
+-					replace(/%style-src%/g, 'https://aui-cdn.atlassian.com https://*.atlassian.net').
++					replace(/%style-src%/g, 'https://aui-cdn.atlassian.com https://!*.atlassian.net').
+ 					replace(/%connect-src%/g, '').
+ 					replace(/  /g, ' ') +
+ 					'worker-src https://ac.draw.io/service-worker.js;';
+@@ -108,7 +109,7 @@
+
+ 			var aj_draw_io = csp.replace(/%script-src%/g, 'https://aui-cdn.atlassian.com https://connect-cdn.atl-paas.net').
+ 					replace(/%frame-src%/g, 'blob:').
+-					replace(/%style-src%/g, 'https://aui-cdn.atlassian.com https://*.atlassian.net').
++					replace(/%style-src%/g, 'https://aui-cdn.atlassian.com https://!*.atlassian.net').
+ 					replace(/%connect-src%/g, 'https://api.atlassian.com https://api.media.atlassian.com').
+ 					replace(/  /g, ' ') +
+ 					'worker-src https://aj.draw.io/service-worker.js;';
+@@ -143,6 +144,7 @@
+ 		}
+ 	})();
+ }
++*/
+
+ mxscript(drawDevUrl + 'js/cryptojs/aes.min.js');
+ mxscript(drawDevUrl + 'js/spin/spin.min.js');
+@@ -306,4 +308,5 @@
+ mxscript(drawDevUrl + 'js/diagramly/miro/MiroImporter.js');
+
+ // Mermaid to draw.io converter
+-mxscript(drawDevUrl + 'js/mermaid/mermaid2drawio.js');
++// mxscript(drawDevUrl + 'js/mermaid/mermaid2drawio.js');
++mxscript(drawDevUrl + 'js/mermaid/mermaid.min.js');
