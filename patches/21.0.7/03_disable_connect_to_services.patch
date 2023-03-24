@@ -1,4 +1,4 @@
-Subject: [PATCH] disable_connect_to_services
+Subject: [PATCH] 03_disable_connect_to_services
 ---
 Index: web/js/diagramly/EditorUi.js
 IDEA additional info:
@@ -6,8 +6,8 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 <+>UTF-8
 ===================================================================
 diff --git a/web/js/diagramly/EditorUi.js b/web/js/diagramly/EditorUi.js
---- a/web/js/diagramly/EditorUi.js	(revision bc9a28fd7520dc097520342ae09260e3ba79186d)
-+++ b/web/js/diagramly/EditorUi.js	(date 1679678123392)
+--- a/web/js/diagramly/EditorUi.js	(revision 37b8a71b245777834f520fd975bdc2d64c6b2bbb)
++++ b/web/js/diagramly/EditorUi.js	(date 1679678767513)
 @@ -18811,7 +18811,8 @@
  		
  		return file != null &&
@@ -24,8 +24,8 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 <+>UTF-8
 ===================================================================
 diff --git a/util/build.xml b/util/build.xml
---- a/util/build.xml	(revision bc9a28fd7520dc097520342ae09260e3ba79186d)
-+++ b/util/build.xml	(date 1679678579075)
+--- a/util/build.xml	(revision 37b8a71b245777834f520fd975bdc2d64c6b2bbb)
++++ b/util/build.xml	(date 1679678767427)
 @@ -407,21 +407,21 @@
                  <file name="DriveFile.js"/>
                  <file name="DriveLibrary.js"/>
@@ -69,8 +69,8 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 <+>UTF-8
 ===================================================================
 diff --git a/web/js/diagramly/Menus.js b/web/js/diagramly/Menus.js
---- a/web/js/diagramly/Menus.js	(revision bc9a28fd7520dc097520342ae09260e3ba79186d)
-+++ b/web/js/diagramly/Menus.js	(date 1679678463158)
+--- a/web/js/diagramly/Menus.js	(revision 37b8a71b245777834f520fd975bdc2d64c6b2bbb)
++++ b/web/js/diagramly/Menus.js	(date 1679678767533)
 @@ -56,7 +56,7 @@
  		var editorUi = this.editorUi;
  		var graph = editorUi.editor.graph;
@@ -206,8 +206,8 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 <+>UTF-8
 ===================================================================
 diff --git a/web/js/diagramly/App.js b/web/js/diagramly/App.js
---- a/web/js/diagramly/App.js	(revision bc9a28fd7520dc097520342ae09260e3ba79186d)
-+++ b/web/js/diagramly/App.js	(date 1679677642245)
+--- a/web/js/diagramly/App.js	(revision 37b8a71b245777834f520fd975bdc2d64c6b2bbb)
++++ b/web/js/diagramly/App.js	(date 1679678767476)
 @@ -1489,10 +1489,10 @@
  	/**
  	 * Creates github client.
@@ -234,3 +234,98 @@ diff --git a/web/js/diagramly/App.js b/web/js/diagramly/App.js
  
  	if (this.gitLab != null)
  	{
+Index: web/js/diagramly/Devel.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/web/js/diagramly/Devel.js b/web/js/diagramly/Devel.js
+--- a/web/js/diagramly/Devel.js	(revision 37b8a71b245777834f520fd975bdc2d64c6b2bbb)
++++ b/web/js/diagramly/Devel.js	(date 1679678786035)
+@@ -6,12 +6,13 @@
+  * is used for development mode where the JS is in separate
+  * files and the mxClient.js loads other files.
+  */
++/*
+ if (!mxIsElectron && location.protocol !== 'http:')
+ {
+ 	(function()
+ 	{
+ 		var hashes = 'default-src \'self\'; ' +
+-			'script-src %script-src% \'self\' https://viewer.diagrams.net https://apis.google.com https://*.pusher.com ' +
++			'script-src %script-src% \'self\' https://viewer.diagrams.net https://apis.google.com https://!*.pusher.com ' +
+ 			// Below are the SHAs of the two script blocks in index.html.
+ 			// These must be updated here and in the CDN after changes.
+ 			//----------------------------------------------------------//
+@@ -69,7 +70,7 @@
+ 			// Adds script tags and loads shapes with eval
+ 			replace(/%script-src%/g, 'https://www.dropbox.com https://api.trello.com https://devhost.jgraph.com \'unsafe-eval\'').
+ 			// Adds Trello and Dropbox backend storage
+-			replace(/%connect-src%/g, 'https://*.dropboxapi.com https://trello.com https://api.trello.com').
++			replace(/%connect-src%/g, 'https://!*.dropboxapi.com https://trello.com https://api.trello.com').
+ 			// Loads common.css from mxgraph
+ 			replace(/%style-src%/g, 'https://devhost.jgraph.com').
+ 			replace(/%frame-src%/g, '').
+@@ -81,7 +82,7 @@
+ 		{
+ 			console.log('Content-Security-Policy');
+ 			var app_diagrams_net = csp.replace(/%script-src%/g, 'https://www.dropbox.com https://api.trello.com').
+-				replace(/%connect-src%/g, 'https://*.dropboxapi.com https://api.trello.com').
++				replace(/%connect-src%/g, 'https://!*.dropboxapi.com https://api.trello.com').
+ 				replace(/%frame-src%/g, '').
+ 					replace(/%style-src%/g, '').
+ 					replace(/  /g, ' ') + ' frame-ancestors \'self\' https://teams.microsoft.com;';
+@@ -143,6 +144,7 @@
+ 		}
+ 	})();
+ }
++*/
+ 
+ mxscript(drawDevUrl + 'js/cryptojs/aes.min.js');
+ mxscript(drawDevUrl + 'js/spin/spin.min.js');
+@@ -255,22 +257,22 @@
+ mxscript(drawDevUrl + 'js/diagramly/DriveFile.js');
+ mxscript(drawDevUrl + 'js/diagramly/DriveLibrary.js');
+ mxscript(drawDevUrl + 'js/diagramly/DriveClient.js');
+-mxscript(drawDevUrl + 'js/diagramly/DropboxFile.js');
+-mxscript(drawDevUrl + 'js/diagramly/DropboxLibrary.js');
+-mxscript(drawDevUrl + 'js/diagramly/DropboxClient.js');
+-mxscript(drawDevUrl + 'js/diagramly/GitHubFile.js');
+-mxscript(drawDevUrl + 'js/diagramly/GitHubLibrary.js');
+-mxscript(drawDevUrl + 'js/diagramly/GitHubClient.js');
+-mxscript(drawDevUrl + 'js/diagramly/OneDriveFile.js');
+-mxscript(drawDevUrl + 'js/diagramly/OneDriveLibrary.js');
+-mxscript(drawDevUrl + 'js/diagramly/OneDriveClient.js');
+-mxscript(drawDevUrl + 'js/onedrive/mxODPicker.js');
+-mxscript(drawDevUrl + 'js/diagramly/TrelloFile.js');
+-mxscript(drawDevUrl + 'js/diagramly/TrelloLibrary.js');
+-mxscript(drawDevUrl + 'js/diagramly/TrelloClient.js');
+-mxscript(drawDevUrl + 'js/diagramly/GitLabFile.js');
+-mxscript(drawDevUrl + 'js/diagramly/GitLabLibrary.js');
+-mxscript(drawDevUrl + 'js/diagramly/GitLabClient.js');
++// mxscript(drawDevUrl + 'js/diagramly/DropboxFile.js');
++// mxscript(drawDevUrl + 'js/diagramly/DropboxLibrary.js');
++// mxscript(drawDevUrl + 'js/diagramly/DropboxClient.js');
++// mxscript(drawDevUrl + 'js/diagramly/GitHubFile.js');
++// mxscript(drawDevUrl + 'js/diagramly/GitHubLibrary.js');
++// mxscript(drawDevUrl + 'js/diagramly/GitHubClient.js');
++// mxscript(drawDevUrl + 'js/diagramly/OneDriveFile.js');
++// mxscript(drawDevUrl + 'js/diagramly/OneDriveLibrary.js');
++// mxscript(drawDevUrl + 'js/diagramly/OneDriveClient.js');
++// mxscript(drawDevUrl + 'js/onedrive/mxODPicker.js');
++// mxscript(drawDevUrl + 'js/diagramly/TrelloFile.js');
++// mxscript(drawDevUrl + 'js/diagramly/TrelloLibrary.js');
++// mxscript(drawDevUrl + 'js/diagramly/TrelloClient.js');
++// mxscript(drawDevUrl + 'js/diagramly/GitLabFile.js');
++// mxscript(drawDevUrl + 'js/diagramly/GitLabLibrary.js');
++// mxscript(drawDevUrl + 'js/diagramly/GitLabClient.js');
+ 
+ mxscript(drawDevUrl + 'js/diagramly/App.js');
+ mxscript(drawDevUrl + 'js/diagramly/Menus.js');
+@@ -306,4 +308,5 @@
+ mxscript(drawDevUrl + 'js/diagramly/miro/MiroImporter.js');
+ 
+ // Mermaid to draw.io converter
+-mxscript(drawDevUrl + 'js/mermaid/mermaid2drawio.js');
++// mxscript(drawDevUrl + 'js/mermaid/mermaid2drawio.js');
++mxscript(drawDevUrl + 'js/mermaid/mermaid.min.js');
