@@ -1,0 +1,236 @@
+Subject: [PATCH] disable_connect_to_services
+---
+Index: web/js/diagramly/EditorUi.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/web/js/diagramly/EditorUi.js b/web/js/diagramly/EditorUi.js
+--- a/web/js/diagramly/EditorUi.js	(revision bc9a28fd7520dc097520342ae09260e3ba79186d)
++++ b/web/js/diagramly/EditorUi.js	(date 1679678123392)
+@@ -18811,7 +18811,8 @@
+ 		
+ 		return file != null &&
+ 				((file.constructor == DriveFile && file.isEditable()) ||
+-				file.constructor == DropboxFile);
++				false) //file.constructor == DropboxFile);
++				// file.constructor == DropboxFile);
+ 	};
+ 	
+ 	//===========Adding methods to find the service running draw.io and allowing calling draw.io remote services
+Index: util/build.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/util/build.xml b/util/build.xml
+--- a/util/build.xml	(revision bc9a28fd7520dc097520342ae09260e3ba79186d)
++++ b/util/build.xml	(date 1679678579075)
+@@ -407,21 +407,21 @@
+                 <file name="DriveFile.js"/>
+                 <file name="DriveLibrary.js"/>
+                 <file name="DriveClient.js"/>
+-                <file name="DropboxFile.js"/>
+-                <file name="DropboxLibrary.js"/>
+-                <file name="DropboxClient.js"/>
+-                <file name="OneDriveFile.js"/>
+-                <file name="OneDriveLibrary.js"/>
+-                <file name="OneDriveClient.js"/>
+-                <file name="GitHubFile.js"/>
+-                <file name="GitHubLibrary.js"/>
+-                <file name="GitHubClient.js"/>
+-                <file name="TrelloFile.js"/>
+-                <file name="TrelloLibrary.js"/>
+-                <file name="TrelloClient.js"/>
+-                <file name="GitLabFile.js"/>
+-                <file name="GitLabLibrary.js"/>
+-                <file name="GitLabClient.js"/>
++<!--                <file name="DropboxFile.js"/>-->
++<!--                <file name="DropboxLibrary.js"/>-->
++<!--                <file name="DropboxClient.js"/>-->
++<!--                <file name="OneDriveFile.js"/>-->
++<!--                <file name="OneDriveLibrary.js"/>-->
++<!--                <file name="OneDriveClient.js"/>-->
++<!--                <file name="GitHubFile.js"/>-->
++<!--                <file name="GitHubLibrary.js"/>-->
++<!--                <file name="GitHubClient.js"/>-->
++<!--                <file name="TrelloFile.js"/>-->
++<!--                <file name="TrelloLibrary.js"/>-->
++<!--                <file name="TrelloClient.js"/>-->
++<!--                <file name="GitLabFile.js"/>-->
++<!--                <file name="GitLabLibrary.js"/>-->
++<!--                <file name="GitLabClient.js"/>-->
+                 <file name="DrawioComment.js"/>
+                 <file name="DriveComment.js"/>
+             </sources>
+Index: web/js/diagramly/Menus.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/web/js/diagramly/Menus.js b/web/js/diagramly/Menus.js
+--- a/web/js/diagramly/Menus.js	(revision bc9a28fd7520dc097520342ae09260e3ba79186d)
++++ b/web/js/diagramly/Menus.js	(date 1679678463158)
+@@ -56,7 +56,7 @@
+ 		var editorUi = this.editorUi;
+ 		var graph = editorUi.editor.graph;
+ 		var isGraphEnabled = mxUtils.bind(graph, graph.isEnabled);
+-		var googleEnabled = ((urlParams['embed'] != '1' && urlParams['gapi'] != '0') ||
++	/*	var googleEnabled = ((urlParams['embed'] != '1' && urlParams['gapi'] != '0') ||
+ 			(urlParams['embed'] == '1' && urlParams['gapi'] == '1')) && mxClient.IS_SVG &&
+ 			isLocalStorage && (document.documentMode == null || document.documentMode >= 10);
+ 		var dropboxEnabled = ((urlParams['embed'] != '1' && urlParams['db'] != '0') || (urlParams['embed'] == '1' && urlParams['db'] == '1')) &&
+@@ -66,7 +66,11 @@
+ 			(((urlParams['embed'] != '1' && urlParams['od'] != '0') || (urlParams['embed'] == '1' && urlParams['od'] == '1')) &&
+ 			!mxClient.IS_IOS && (navigator.userAgent.indexOf('MSIE') < 0 || document.documentMode >= 10));
+ 		var trelloEnabled = urlParams['tr'] == '1' && mxClient.IS_SVG && (document.documentMode == null ||
+-			document.documentMode > 9);
++			document.documentMode > 9);*/
++		var googleEnabled=false
++		var dropboxEnabled=false
++		var oneDriveEnabled=false
++		var trelloEnabled=false
+ 
+ 		if (!mxClient.IS_SVG && !editorUi.isOffline())
+ 		{
+@@ -4702,7 +4706,7 @@
+ 		{
+ 			var file = editorUi.getCurrentFile();
+ 			
+-			if (file != null && (file.constructor == DriveFile || file.constructor == OneDriveFile))
++			if (file != null && (file.constructor == DriveFile ))//|| file.constructor == OneDriveFile))
+ 			{
+ 				editorUi.menus.addMenuItems(menu, ['save', 'makeCopy', '-', 'rename', 'moveToFolder'], parent);
+ 			}
+@@ -4820,9 +4824,10 @@
+ 					}
+ 
+ 					if (Editor.currentTheme != 'simple' &&
+-						(file.constructor == DriveFile ||
+-						file.constructor == GitHubFile ||
+-						file.constructor == OneDriveFile))
++						(file.constructor == DriveFile// ||
++						//file.constructor == GitHubFile ||
++						//file.constructor == OneDriveFile
++							 ))
+ 					{
+ 						editorUi.menus.addMenuItems(menu, ['share'], parent);
+ 					}
+@@ -4848,7 +4853,7 @@
+ 
+ 					if (file != null)
+ 					{
+-						if (file.constructor == OneDriveFile ||
++						if (//file.constructor == OneDriveFile ||
+ 							file.constructor == DriveFile)
+ 						{
+ 							editorUi.menus.addMenuItems(menu, ['moveToFolder'], parent);
+@@ -4870,11 +4875,11 @@
+ 				
+ 				menu.addSeparator(parent);
+ 
+-				if (file != null && file.isRevisionHistorySupported())
++	/*			if (file != null && file.isRevisionHistorySupported())
+ 				{
+ 					editorUi.menus.addMenuItems(menu, ['revisionHistory'], parent);
+ 				}
+-
++*/
+ 				if (file != null && editorUi.fileNode != null && urlParams['embedInline'] != '1')
+ 				{
+ 					var filename = (file.getTitle() != null) ?
+@@ -4908,10 +4913,10 @@
+ 					
+ 					var item = this.addMenuItem(menu, 'synchronize', parent);
+ 					
+-					if (!editorUi.isOffline() || mxClient.IS_CHROMEAPP || EditorUi.isElectronApp)
++			/*		if (!editorUi.isOffline() || mxClient.IS_CHROMEAPP || EditorUi.isElectronApp)
+ 					{
+ 						this.addLinkToItem(item, 'https://www.diagrams.net/doc/faq/synchronize');
+-					}
++					}*/
+ 					
+ 					menu.addSeparator(parent);
+ 				}
+@@ -4949,12 +4954,12 @@
+ 					
+ 					this.addMenuItems(menu, ['-', 'save', 'saveAs', '-'], parent);
+ 					
+-					if (!mxClient.IS_CHROMEAPP && !EditorUi.isElectronApp &&
++			/*		if (!mxClient.IS_CHROMEAPP && !EditorUi.isElectronApp &&
+ 						editorUi.getServiceName() == 'draw.io' &&
+ 						!editorUi.isOfflineApp() && file != null)
+ 					{
+ 						this.addMenuItems(menu, ['share', '-'], parent);
+-					}
++					}*/
+ 					
+ 					if (file != null && file.isRenamable())
+ 					{
+@@ -4974,10 +4979,10 @@
+ 
+ 						if (file != null)
+ 						{
+-							if (file.constructor == OneDriveFile)
++						/*	if (file.constructor == OneDriveFile)
+ 							{
+ 								this.addMenuItems(menu, ['moveToFolder'], parent);
+-							}
++							}*/
+ 
+ 							if (file.getFolderUrl() != null)
+ 							{
+@@ -4992,16 +4997,16 @@
+ 				this.addSubmenu('exportAs', menu, parent);
+ 				menu.addSeparator(parent);
+ 				this.addSubmenu('embed', menu, parent);
+-				this.addSubmenu('publish', menu, parent);
++				//this.addSubmenu('publish', menu, parent);
+ 				menu.addSeparator(parent);
+ 				this.addSubmenu('newLibrary', menu, parent);
+ 				this.addSubmenu('openLibraryFrom', menu, parent);
+ 				
+-				if (editorUi.isRevisionHistorySupported())
++		/*		if (editorUi.isRevisionHistorySupported())
+ 				{
+ 					this.addMenuItems(menu, ['-', 'revisionHistory'], parent);
+ 				}
+-				
++				*/
+ 				if (file != null && editorUi.fileNode != null && urlParams['embedInline'] != '1')
+ 				{
+ 					var filename = (file.getTitle() != null) ?
+Index: web/js/diagramly/App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/web/js/diagramly/App.js b/web/js/diagramly/App.js
+--- a/web/js/diagramly/App.js	(revision bc9a28fd7520dc097520342ae09260e3ba79186d)
++++ b/web/js/diagramly/App.js	(date 1679677642245)
+@@ -1489,10 +1489,10 @@
+ 	/**
+ 	 * Creates github client.
+ 	 */
+-	this.gitHub = (!mxClient.IS_IE || document.documentMode == 10 ||
++/*	this.gitHub = (!mxClient.IS_IE || document.documentMode == 10 ||
+ 			mxClient.IS_IE11 || mxClient.IS_EDGE) &&
+ 			(urlParams['gh'] != '0' && (urlParams['embed'] != '1' ||
+-			urlParams['gh'] == '1')) ? new GitHubClient(this) : null;
++			urlParams['gh'] == '1')) ? new GitHubClient(this) : null;*/
+ 	
+ 	if (this.gitHub != null)
+ 	{
+@@ -1514,10 +1514,10 @@
+ 	/**
+ 	 * Creates gitlab client.
+ 	 */
+-	this.gitLab = (!mxClient.IS_IE || document.documentMode == 10 ||
++/*	this.gitLab = (!mxClient.IS_IE || document.documentMode == 10 ||
+ 		mxClient.IS_IE11 || mxClient.IS_EDGE) &&
+ 		(urlParams['gl'] != '0' && (urlParams['embed'] != '1' ||
+-		urlParams['gl'] == '1')) ? new GitLabClient(this) : null;
++		urlParams['gl'] == '1')) ? new GitLabClient(this) : null;*/
+ 
+ 	if (this.gitLab != null)
+ 	{

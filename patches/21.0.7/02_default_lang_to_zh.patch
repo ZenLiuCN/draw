@@ -1,0 +1,16 @@
+Subject: [PATCH] 02_default_lang_to_zh
+---
+Index: web/js/PreConfig.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/web/js/PreConfig.js b/web/js/PreConfig.js
+--- a/web/js/PreConfig.js	(revision bc9a28fd7520dc097520342ae09260e3ba79186d)
++++ b/web/js/PreConfig.js	(date 1679676978878)
+@@ -11,3 +11,5 @@
+ window.DRAW_MATH_URL = 'math/es5';
+ window.DRAWIO_CONFIG = null; // Replace with your custom draw.io configurations. For more details, https://www.diagrams.net/doc/faq/configure-diagram-editor
+ urlParams['sync'] = 'manual';
++urlParams['lang'] = 'zh';
++
