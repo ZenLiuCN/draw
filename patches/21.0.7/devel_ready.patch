@@ -1,0 +1,102 @@
+Subject: [PATCH] devel_ready
+---
+Index: web/index.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/web/index.html b/web/index.html
+--- a/web/index.html	(revision c9b9cab57dc62845a84b447d0d48aba9b13905b9)
++++ b/web/index.html	(date 1679676102114)
+@@ -11,7 +11,7 @@
+ 	<meta itemprop="description" content="draw.io is a free online diagramming application and flowchart maker . You can use it to create UML, entity relationship,
+ 		org charts, BPMN and BPM, database schema and networks. Also possible are telecommunication network, workflow, flowcharts, maps overlays and GIS, electronic 
+ 		circuit and social network diagrams.">
+-	<meta itemprop="image" content="https://lh4.googleusercontent.com/-cLKEldMbT_E/Tx8qXDuw6eI/AAAAAAAAAAs/Ke0pnlk8Gpg/w500-h344-k/BPMN%2Bdiagram%2Brc2f.png">
++<!--	<meta itemprop="image" content="https://lh4.googleusercontent.com/-cLKEldMbT_E/Tx8qXDuw6eI/AAAAAAAAAAs/Ke0pnlk8Gpg/w500-h344-k/BPMN%2Bdiagram%2Brc2f.png">-->
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ 	<meta name="msapplication-config" content="images/browserconfig.xml">
+     <meta name="mobile-web-app-capable" content="yes">
+@@ -257,6 +257,10 @@
+ 			
+ 			// Used to request draw.io sources in dev mode
+ 			var drawDevUrl = document.location.protocol + '//devhost.jgraph.com/drawio/src/main/webapp/';
++			if(urlParams['local']=='1'){
++				mxDevUrl=document.location.protocol+'//'+document.location.host+'/';
++				drawDevUrl=document.location.protocol+'//'+document.location.host+'/';
++			}
+ 			var geBasePath = drawDevUrl + '/js/grapheditor';
+ 			var mxBasePath = mxDevUrl + '/mxgraph';
+ 			
+@@ -357,13 +361,13 @@
+ 			}
+ 		};
+ 	</script>
+-    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/plgmlhohecdddhbmmkncjdmlhcmaachm">
++<!--    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/plgmlhohecdddhbmmkncjdmlhcmaachm">-->
+ 	<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+ 	<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+ 	<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+ 	<link rel="mask-icon" href="images/safari-pinned-tab.svg" color="#d89000">
+     <link rel="stylesheet" type="text/css" href="styles/grapheditor.css">
+-    <link rel="canonical" href="https://app.diagrams.net">
++<!--    <link rel="canonical" href="https://app.diagrams.net">-->
+ 	<link rel="manifest" href="images/manifest.json">
+ 	<link rel="shortcut icon" href="favicon.ico">
+ 	<style type="text/css">
+Index: web/js/diagramly/Devel.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/web/js/diagramly/Devel.js b/web/js/diagramly/Devel.js
+--- a/web/js/diagramly/Devel.js	(revision c9b9cab57dc62845a84b447d0d48aba9b13905b9)
++++ b/web/js/diagramly/Devel.js	(date 1679676142746)
+@@ -6,12 +6,13 @@
+  * is used for development mode where the JS is in separate
+  * files and the mxClient.js loads other files.
+  */
++/*
+ if (!mxIsElectron && location.protocol !== 'http:')
+ {
+ 	(function()
+ 	{
+ 		var hashes = 'default-src \'self\'; ' +
+-			'script-src %script-src% \'self\' https://viewer.diagrams.net https://apis.google.com https://*.pusher.com ' +
++			'script-src %script-src% \'self\' https://viewer.diagrams.net https://apis.google.com https://!*.pusher.com ' +
+ 			// Below are the SHAs of the two script blocks in index.html.
+ 			// These must be updated here and in the CDN after changes.
+ 			//----------------------------------------------------------//
+@@ -69,7 +70,7 @@
+ 			// Adds script tags and loads shapes with eval
+ 			replace(/%script-src%/g, 'https://www.dropbox.com https://api.trello.com https://devhost.jgraph.com \'unsafe-eval\'').
+ 			// Adds Trello and Dropbox backend storage
+-			replace(/%connect-src%/g, 'https://*.dropboxapi.com https://trello.com https://api.trello.com').
++			replace(/%connect-src%/g, 'https://!*.dropboxapi.com https://trello.com https://api.trello.com').
+ 			// Loads common.css from mxgraph
+ 			replace(/%style-src%/g, 'https://devhost.jgraph.com').
+ 			replace(/%frame-src%/g, '').
+@@ -81,7 +82,7 @@
+ 		{
+ 			console.log('Content-Security-Policy');
+ 			var app_diagrams_net = csp.replace(/%script-src%/g, 'https://www.dropbox.com https://api.trello.com').
+-				replace(/%connect-src%/g, 'https://*.dropboxapi.com https://api.trello.com').
++				replace(/%connect-src%/g, 'https://!*.dropboxapi.com https://api.trello.com').
+ 				replace(/%frame-src%/g, '').
+ 					replace(/%style-src%/g, '').
+ 					replace(/  /g, ' ') + ' frame-ancestors \'self\' https://teams.microsoft.com;';
+@@ -143,6 +144,7 @@
+ 		}
+ 	})();
+ }
++*/
+ 
+ mxscript(drawDevUrl + 'js/cryptojs/aes.min.js');
+ mxscript(drawDevUrl + 'js/spin/spin.min.js');
+@@ -306,4 +308,5 @@
+ mxscript(drawDevUrl + 'js/diagramly/miro/MiroImporter.js');
+ 
+ // Mermaid to draw.io converter
+-mxscript(drawDevUrl + 'js/mermaid/mermaid2drawio.js');
++// mxscript(drawDevUrl + 'js/mermaid/mermaid2drawio.js');
++mxscript(drawDevUrl + 'js/mermaid/mermaid.min.js');
